@@ -1,4 +1,4 @@
-# Typebot Branding Injector (Chrome Extension)
+# Typebot Injector (Chrome Extension)
 
 This Chrome Extension allows you to inject a branded **Typebot** onto any website you are currently visiting. It automatically scrapes the website's branding assets (Logo, Fonts, and Colors) and applies them to the Typebot's theme dynamically.
 
@@ -50,7 +50,7 @@ Publish your bot and copy the **Typebot ID** (or slug) from the Share tab.
 4.  Click **Save Bot**.
 
 ### 2. Inject on a Website
-1.  Navigate to a target website (e.g., `https://stripe.com`).
+1.  Navigate to a target website (e.g., `https://domain.com`). Please note, some sites have `Content Security Policy directives` and will block the extension from running. 
 2.  Open the extension (defaults to the **🚀 Inject** tab).
 3.  **Select Typebot:** Choose the bot you saved earlier.
 4.  **Company Name:** Enter the prospect's name (e.g., "Stripe").

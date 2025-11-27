@@ -1,69 +1,74 @@
-Here is a professional, ready-to-use `README.md` for your GitHub repository. It includes installation instructions, usage, and a technical overview of how the branding logic works.
+# Typebot Branding Injector (Chrome Extension)
 
-***
+This Chrome Extension allows you to inject a branded **Typebot** onto any website you are currently visiting. It automatically scrapes the website's branding assets (Logo, Fonts, and Colors) and applies them to the Typebot's theme dynamically.
 
-# Typebot Brand Injector 🤖🎨
+This tool is perfect for sales demos, prospecting, or previewing how a chatbot would look on a client's site without writing a single line of code.
 
-**Instantly inject a fully branded Typebot into any website for sales demos and testing.**
+## 🌟 Features
 
-This Chrome Extension scans the current webpage for branding elements (logos, fonts, colors) and dynamically injects a Typebot instance styled to match the target company's identity. It is the perfect tool for Sales Engineers and Agencies to demonstrate the value of Typebot to prospects directly on their own website.
+*   **Auto-Branding:** Scrapes the favicon, primary colors (from buttons/CSS), and font family.
+*   **Dynamic Injection:** Injects the Typebot script into the current page context.
+*   **Bot Management:** Save multiple Typebot IDs (e.g., "Sales Bot", "Support Bot") and switch between them easily.
+*   **Theming:** Automatically maps the scraped font and colors to the Typebot UI.
+*   **Variable Injection:** Passes scraped data (Company Name, Logo URL) as Typebot variables for use in the chat flow.
+*   **Modes:** Supports both `Bubble` (bottom right widget) and `Popup` (modal) modes.
 
-## ✨ Features
+## 📂 Installation
 
-*   **🎨 Automatic Branding Extraction:** Scans the DOM for:
-    *   **Logo:** Prioritizes Favicons, OpenGraph images, and header images.
-    *   **Colors:** Detects Primary/Secondary colors via CSS variables and computed styles (filtering out black/white/grays).
-    *   **Fonts:** Extracts the primary font family used in H1/H2 headers.
-*   **🔌 Two Display Modes:** Toggle between **Bubble** (chat widget in corner) or **Popup** (center screen overlay).
-*   **🛠️ Safe Injection:** Uses `web_accessible_resources` to inject module scripts, bypassing standard CSP (Content Security Policy) restrictions on most websites.
-*   **⚡ Live Preview:** changes happen instantly without reloading the page.
-
-## 📥 Installation
-
-Since this extension is for development/demo purposes, it is installed via "Developer Mode":
-
-1.  **Clone or Download** this repository to your computer.
-2.  Open Google Chrome and navigate to `chrome://extensions/`.
+1.  Download or clone this repository to your local machine.
+2.  Open Chrome and navigate to `chrome://extensions`.
 3.  Toggle **Developer mode** in the top right corner.
 4.  Click **Load unpacked**.
-5.  Select the folder where you downloaded this repository.
+5.  Select the folder containing the extension files (`manifest.json`, etc.).
+
+## 🤖 Typebot Setup (Important)
+
+For the branding to work effectively inside the chat bubbles, your Typebot needs to accept specific variables.
+
+### 1. Create a Typebot
+You can use this demo bot as a template: [View Demo Bot](https://app.typebot.io/typebots/lrcisse49sv13n01k2kuanqq/edit)
+
+### 2. Define Variables
+In your Typebot editor, ensure you have these variables defined if you want to use the scraped data in your text bubbles:
+
+| Variable Name | Description | Example Usage in Typebot |
+| :--- | :--- | :--- |
+| `companyName` | Name entered in the extension popup | "Welcome to **{{companyName}}**!" |
+| `logo` | URL of the scraped logo/favicon | Image block source set to `{{logo}}` |
+| `fontFamily` | The CSS font stack scraped from the site | "We noticed you use **{{fontFamily}}**." |
+| `primaryBrandColor` | Hex code of the primary color | (Used automatically for theme) |
+
+### 3. Publish
+Publish your bot and copy the **Typebot ID** (or slug) from the Share tab.
 
 ## 🚀 How to Use
 
-1.  Navigate to a target website (e.g., a potential client's landing page).
-2.  Click the **Typebot Injector** icon in your Chrome toolbar.
-3.  Fill in the details:
-    *   **Typebot ID:** The slug or ID of your bot (e.g., `adler-advisory-bot-v0b63zn`).
-    *   **Company Name:** The name of the prospect (used to personalize variables).
-    *   **Display Mode:** Choose `Bubble` or `Popup`.
-4.  Click **Inject Typebot**.
-5.  Watch the bot appear with the site's colors and fonts applied automatically!
+### 1. Save your Bot(s)
+1.  Click the extension icon.
+2.  Click the **⚙️ Manage Bots** tab.
+3.  Enter a name (e.g., "Sales Demo") and your Typebot ID/Slug.
+4.  Click **Save Bot**.
 
-## ⚙️ How it Works
+### 2. Inject on a Website
+1.  Navigate to a target website (e.g., `https://stripe.com`).
+2.  Open the extension (defaults to the **🚀 Inject** tab).
+3.  **Select Typebot:** Choose the bot you saved earlier.
+4.  **Company Name:** Enter the prospect's name (e.g., "Stripe").
+5.  **Display Mode:** Choose `Bubble` or `Popup`.
+6.  Click **Inject Typebot**.
 
-The extension operates via a content script (`content.js`) and an injected module (`injected-script.js`).
+The bot will appear on the page, styled with the website's colors and fonts.
 
-1.  **Scraping:** When you click "Inject", `content.js` runs heuristics on the DOM.
-    *   *Colors:* It looks for common CSS variable names (`--primary`, `--brand`) and falls back to computing the color of Header and Button elements.
-    *   *Logos:* It checks `<link rel="icon">`, `<meta property="og:image">`, and standard `<nav>` images.
-2.  **Configuration:** The extension creates a hidden JSON configuration element in the DOM containing the extracted branding and your Typebot ID.
-3.  **Injection:** It injects `injected-script.js` as a module. This script reads the configuration and initializes the Typebot SDK (`@typebot.io/js`) directly into the page context.
+## 🛠 Project Structure
 
-## ⚠️ Known Limitations
+*   `manifest.json`: Configuration and permissions (Manifest V3).
+*   `popup.html`: The extension interface (Tabs for Injecting and Managing).
+*   `popup.js`: Logic for saving bots to Chrome Storage and sending injection messages.
+*   `content.js`: Scrapes website styles and handles the DOM injection.
+*   `injected-script.js`: The module that initializes the Typebot library on the page.
 
-*   **Strict CSP:** Some highly secure websites (e.g., GitHub, Facebook, Banking sites) enforce very strict Content Security Policies that block *any* external script from loading (including `cdn.jsdelivr.net`). The extension may not work on these specific sites.
-*   **Variable Names:** The extension relies on Typebot variables named `companyName`, `logo`, `fontFamily`, `primaryBrandColor`, and `secondaryBrandColor`. Ensure your Typebot flow is set up to use these variables.
+## ⚠️ Troubleshooting
 
-## 🤝 Contributing
-
-Contributions are welcome! If you have a better way to detect brand colors or handle strict CSPs, please open a pull request.
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
+*   **"Error: Refresh page and try again":** Content scripts sometimes disconnect if the extension is reloaded. Refreshing the web page usually fixes this.
+*   **CSP Errors:** Some websites (like GitHub, Facebook) have strict Content Security Policies that block external scripts. The bot may fail to load on these specific sites.
+*   **Font Rendering:** The extension attempts to use the site's computed font. If the font is not globally available on the user's machine, it falls back to standard sans-serif fonts.

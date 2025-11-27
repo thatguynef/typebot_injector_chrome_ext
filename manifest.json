@@ -1,11 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Typebot Injector",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Injects a branded Typebot based on the current website styles.",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
   "action": {
-    "default_popup": "popup.html",    
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",

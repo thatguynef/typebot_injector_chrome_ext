@@ -30,11 +30,18 @@ function findFontFamily() {
   if (h1) return cleanFontString(window.getComputedStyle(h1).fontFamily);
   const h2 = document.querySelector('h2');
   if (h2) return cleanFontString(window.getComputedStyle(h2).fontFamily);
+  
+  // Fallback to body font if headers aren't clear
+  const body = document.body;
+  if (body) return cleanFontString(window.getComputedStyle(body).fontFamily);
+  
   return "Arial, sans-serif";
 }
 
 function cleanFontString(font) {
-  return font.replace(/['"]/g, '').split(',')[0].trim();
+  // Updated: Removes quotes but keeps the full font stack (e.g., Inter, sans-serif)
+  // This ensures fallbacks work if the specific font isn't loaded
+  return font.replace(/['"]/g, '').trim();
 }
 
 function findBrandColors() {
@@ -88,7 +95,7 @@ function isGrayscale(colorString) {
 }
 
 /**
- * UPDATED INJECTION LOGIC TO FIX CSP ERROR
+ * UPDATED INJECTION LOGIC
  */
 function injectTypebotScript(id, companyName, mode, branding) {
   
@@ -105,17 +112,25 @@ function injectTypebotScript(id, companyName, mode, branding) {
     prefilledVars: {
       logo: branding.logo,
       companyName: companyName,
-      fontFamily: branding.fontFamily,
+      fontFamily: branding.fontFamily, // Variable available for logic/text use
       primaryBrandColor: branding.colors.primary,
       secondaryBrandColor: branding.colors.secondary
     },
     theme: {
+      general: {
+        font: branding.fontFamily, // Applies the font visually to the UI
+      },
       button: { backgroundColor: branding.colors.primary },
-      chatWindow: { backgroundColor: "#fff" }
+      chatWindow: { backgroundColor: "#fff" },
+      // Optional: Forces font via CSS if standard theme mapping misses elements
+      customCss: `
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body { font-family: ${branding.fontFamily} !important; }
+      `
     }
   };
 
-  // 3. Inject Config as a hidden DOM element (Script can read this)
+  // 3. Inject Config as a hidden DOM element
   const configScript = document.createElement("script");
   configScript.id = "typebot-extension-config";
   configScript.type = "application/json";
@@ -126,7 +141,6 @@ function injectTypebotScript(id, companyName, mode, branding) {
   const script = document.createElement("script");
   script.id = "typebot-injector-script";
   script.type = "module";
-  // This loads the file from your extension folder
   script.src = chrome.runtime.getURL("injected-script.js"); 
   
   document.body.appendChild(script);

@@ -2,35 +2,94 @@
 <html>
 <head>
   <style>
-    body { width: 300px; padding: 15px; font-family: sans-serif; }
-    h2 { margin-top: 0; font-size: 16px; color: #333; }
-    label { display: block; margin-top: 10px; font-size: 12px; font-weight: bold; }
-    input, select { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
-    button {
-      width: 100%; margin-top: 15px; padding: 10px;
-      background-color: #0042DA; color: white; border: none; cursor: pointer; font-weight: bold;
+    body { width: 320px; padding: 0; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f9f9f9; }
+    
+    /* Navigation Tabs */
+    .tabs { display: flex; background: #fff; border-bottom: 1px solid #ddd; }
+    .tab-btn {
+      flex: 1; padding: 12px; border: none; background: none; cursor: pointer;
+      font-weight: 600; color: #666; transition: 0.2s;
     }
-    button:hover { background-color: #0036b5; }
-    .status { margin-top: 10px; font-size: 12px; color: green; text-align: center; }
+    .tab-btn:hover { background: #f0f0f0; }
+    .tab-btn.active { color: #0042DA; border-bottom: 2px solid #0042DA; }
+
+    /* Content Area */
+    .content { padding: 15px; }
+    .hidden { display: none; }
+
+    /* Form Elements */
+    label { display: block; margin-top: 10px; font-size: 12px; font-weight: bold; color: #444; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    
+    /* Primary Button */
+    .btn-primary {
+      width: 100%; margin-top: 20px; padding: 10px;
+      background-color: #0042DA; color: white; border: none; border-radius: 4px;
+      cursor: pointer; font-weight: bold; transition: 0.2s;
+    }
+    .btn-primary:hover { background-color: #0036b5; }
+    .btn-primary:disabled { background-color: #ccc; cursor: not-allowed; }
+
+    /* Manage List */
+    .bot-form { background: #fff; padding: 10px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 15px; }
+    .bot-list { list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
+    .bot-item { 
+      background: white; border: 1px solid #ddd; padding: 8px; margin-bottom: 5px; 
+      border-radius: 4px; display: flex; justify-content: space-between; align-items: center; 
+    }
+    .bot-info { display: flex; flex-direction: column; }
+    .bot-name { font-weight: bold; font-size: 13px; }
+    .bot-slug { font-size: 11px; color: #888; }
+    .delete-btn { color: #ff4444; cursor: pointer; border: none; background: none; font-size: 16px; padding: 0 5px; }
+    .delete-btn:hover { color: #cc0000; }
+
+    .status { margin-top: 10px; font-size: 12px; text-align: center; height: 15px; }
+    .empty-state { text-align: center; color: #888; font-size: 12px; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h2>Typebot Injector</h2>
 
-  <label for="typebotId">Typebot ID / Slug</label>
-  <input type="text" id="typebotId" placeholder="e.g. your-typebot-id" />
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="inject-view">Inject Bot</button>
+    <button class="tab-btn" data-tab="manage-view">Manage Bots</button>
+  </div>
 
-  <label for="companyName">Company Name</label>
-  <input type="text" id="companyName" placeholder="e.g. Acme Inc." />
+  <!-- INJECT VIEW -->
+  <div id="inject-view" class="content">
+    
+    <label for="botSelector">Select Typebot</label>
+    <select id="botSelector">
+      <option value="">-- Loading --</option>
+    </select>
 
-  <label for="displayMode">Display Mode</label>
-  <select id="displayMode">
-    <option value="bubble">Bubble</option>
-    <option value="popup">Popup</option>
-  </select>
+    <label for="companyName">Company Name</label>
+    <input type="text" id="companyName" placeholder="e.g. Acme Inc." />
 
-  <button id="injectBtn">Inject Typebot</button>
-  <div id="status" class="status"></div>
+    <label for="displayMode">Display Mode</label>
+    <select id="displayMode">
+      <option value="bubble">Bubble</option>
+      <option value="popup">Popup</option>
+    </select>
+
+    <button id="injectBtn" class="btn-primary">Inject Typebot</button>
+    <div id="status" class="status"></div>
+  </div>
+
+  <!-- MANAGE VIEW -->
+  <div id="manage-view" class="content hidden">
+    
+    <div class="bot-form">
+      <label style="margin-top:0">Add New Bot</label>
+      <input type="text" id="newBotName" placeholder="Bot Name (e.g. Sales Demo)" />
+      <input type="text" id="newBotId" placeholder="Typebot ID / Slug" />
+      <button id="addBotBtn" class="btn-primary" style="margin-top:10px; font-size:12px; padding: 8px;">Save Bot</button>
+    </div>
+
+    <label>Saved Bots</label>
+    <ul id="botList" class="bot-list"></ul>
+    <div id="emptyState" class="empty-state hidden">No bots saved yet.</div>
+  </div>
 
   <script src="popup.js"></script>
 </body>

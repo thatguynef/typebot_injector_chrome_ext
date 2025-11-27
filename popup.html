@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 300px; padding: 15px; font-family: sans-serif; }
+    h2 { margin-top: 0; font-size: 16px; color: #333; }
+    label { display: block; margin-top: 10px; font-size: 12px; font-weight: bold; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+    button {
+      width: 100%; margin-top: 15px; padding: 10px;
+      background-color: #0042DA; color: white; border: none; cursor: pointer; font-weight: bold;
+    }
+    button:hover { background-color: #0036b5; }
+    .status { margin-top: 10px; font-size: 12px; color: green; text-align: center; }
+  </style>
+</head>
+<body>
+  <h2>Typebot Injector</h2>
+
+  <label for="typebotId">Typebot ID / Slug</label>
+  <input type="text" id="typebotId" placeholder="e.g. your-typebot-id" />
+
+  <label for="companyName">Company Name</label>
+  <input type="text" id="companyName" placeholder="e.g. Acme Inc." />
+
+  <label for="displayMode">Display Mode</label>
+  <select id="displayMode">
+    <option value="bubble">Bubble</option>
+    <option value="popup">Popup</option>
+  </select>
+
+  <button id="injectBtn">Inject Typebot</button>
+  <div id="status" class="status"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
